@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import { db } from "../../firebase";
 import firebase from "firebase/compat/app";
 
-function ChatInput({ channelName, channelId }) {
+function ChatInput({ channelName, channelId, chatRef }) {
   const [input, setInput] = useState("");
   const sendMessage = (e) => {
     e.preventDefault();
@@ -21,6 +21,11 @@ function ChatInput({ channelName, channelId }) {
       user: "Alex Zelinsky",
       userImage:
         "https://media-exp1.licdn.com/dms/image/C5603AQGac6l9DxzgGQ/profile-displayphoto-shrink_200_200/0/1624600366869?e=1654128000&v=beta&t=Aszv58fDXMCU2IDa-tdiSVapuPGaBeMgXQEBt2CzrRg",
+    });
+
+    // When a message is sent, scrolls into view smoothly on bottom
+    chatRef.current.scrollIntoView({
+      behavior: "smooth",
     });
 
     setInput("");
