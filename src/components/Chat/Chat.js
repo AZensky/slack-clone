@@ -34,7 +34,7 @@ function Chat() {
         <Header>
           <HeaderLeft>
             <h4>
-              <strong>#Room-name</strong>
+              <strong>#{roomDetails?.data().name}</strong>
             </h4>
             <StarBorderOutlinedIcon />
           </HeaderLeft>
@@ -45,7 +45,11 @@ function Chat() {
           </HeaderRight>
         </Header>
 
-        <ChatMessages></ChatMessages>
+        <ChatMessages>
+          {/* {roomMessages?.docs.map((doc) => {
+            const { message, timestamp, user, userImage } = doc.data();
+          })} */}
+        </ChatMessages>
 
         <ChatInput channelName={roomDetails?.data().name} channelId={roomId} />
       </>
