@@ -13,8 +13,12 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import SidebarOption from "./SidebarOption";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import AddIcon from "@mui/icons-material/Add";
+import { useCollection } from "react-firebase-hooks/firestore";
+import { db } from "../../firebase";
 
 function Sidebar() {
+  // FIREBASE HOOK to get the data from firebase easier, a cleaner alternative to the useEffect method.
+  const [channels, loading, error] = useCollection(db.collection("rooms"));
   return (
     <SidebarContainer>
       <SidebarHeader>
@@ -40,6 +44,10 @@ function Sidebar() {
       <SidebarOption Icon={ExpandMoreIcon} title="Channels" />
       <hr />
       <SidebarOption Icon={AddIcon} title="Add Channel" addChannelOption />
+
+      {channels?.docs.map((doc) => (
+        <SidebarOption key={doc.id} id={doc.id} title={doc.data().name} />
+      ))}
     </SidebarContainer>
   );
 }
