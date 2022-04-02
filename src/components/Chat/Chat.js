@@ -5,9 +5,29 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { useSelector } from "react-redux";
 import { selectRoomId } from "../../features/appSlice";
 import ChatInput from "./ChatInput";
+import { useCollection, useDocument } from "react-firebase-hooks/firestore";
+import { db } from "../../firebase";
 
 function Chat() {
   const roomId = useSelector(selectRoomId);
+  //   Gets the room details (title)
+  const [roomDetails] = useDocument(
+    roomId && db.collection("rooms").doc(roomId)
+  );
+
+  //   This gets us the room messages, and orders them in ascending time order by the server time stamp
+  const [roomMessages] = useCollection(
+    roomId &&
+      db
+        .collection("rooms")
+        .doc(roomId)
+        .collection("messages")
+        .orderBy("timestamp", "asc")
+  );
+
+  console.log(roomDetails?.data());
+  console.log(roomMessages);
+
   return (
     <ChatContainer>
       <>
@@ -27,7 +47,7 @@ function Chat() {
 
         <ChatMessages></ChatMessages>
 
-        <ChatInput />
+        <ChatInput channelName={roomDetails?.data().name} channelId={roomId} />
       </>
     </ChatContainer>
   );
