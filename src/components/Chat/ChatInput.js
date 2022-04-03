@@ -3,9 +3,12 @@ import styled from "styled-components";
 import { Button } from "@mui/material";
 import { db } from "../../firebase";
 import firebase from "firebase/compat/app";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../../firebase";
 
 function ChatInput({ channelName, channelId, chatRef }) {
   const [input, setInput] = useState("");
+  const [user] = useAuthState(auth);
   const sendMessage = (e) => {
     e.preventDefault();
 
@@ -18,9 +21,8 @@ function ChatInput({ channelName, channelId, chatRef }) {
       message: input,
       //   Getting the server timestamp ensures that people in different time zones will still have their messages organized properly
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      user: "Alex Zelinsky",
-      userImage:
-        "https://media-exp1.licdn.com/dms/image/C5603AQGac6l9DxzgGQ/profile-displayphoto-shrink_200_200/0/1624600366869?e=1654128000&v=beta&t=Aszv58fDXMCU2IDa-tdiSVapuPGaBeMgXQEBt2CzrRg",
+      user: user.displayName,
+      userImage: user.photoURL,
     });
 
     // When a message is sent, scrolls into view smoothly on bottom
